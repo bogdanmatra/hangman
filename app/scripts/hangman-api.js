@@ -7,11 +7,11 @@
         var DEFAULT_RETRY_VALUE = 3;
         var DEFAULT_MASK = "*";
         var words = parameters.words ? parameters.words : [];
+        var retries = parameters.retries ? parameters.retries : DEFAULT_RETRY_VALUE;
+        var mask = parameters.mask ? parameters.mask : DEFAULT_MASK;
+        var retryCounter = 0;
         var activeWord;
         var maskedWord;
-        var retries = parameters.retries ? parameters.retries : DEFAULT_RETRY_VALUE;
-        var retryCounter = 0;
-        var mask = parameters.mask ? parameters.mask : DEFAULT_MASK;
 
         /**
          * Gets all indexes of the character in the current game active word.
