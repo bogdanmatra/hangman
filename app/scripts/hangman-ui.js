@@ -10,7 +10,7 @@
          */
         var updateUI = function (newMaskedWord) {
             $wordContainer.html(newMaskedWord);
-            $hangmanCounter.html(hangmanGame.getRetryCounter() + " of " + hangmanGame.getNumberOfRetries());
+            $hangmanCounter.html(hangmanGame.getNumberOfRetries() - hangmanGame.getRetryCounter() + " chances left.");
         }
 
         /**

@@ -53,12 +53,13 @@ body {
     outline: none;
 }
 
-.hangman-notice, #hangman-counter {
-    font-size: 20px;
+.hangman-notice {
+    font-size: 25px;
 }
 
 #hangman-counter {
-    font-size: 50px;
+    font-size: 20px;
+    font-style: italic;
 }
 
 #hangman-word-container {
