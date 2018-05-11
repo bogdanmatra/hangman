@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hangman</title>
+    <link rel="stylesheet" type="text/css" href="styles/hangman.css">
+</head>
+<body>
+<div class="hangman-container">
+    <div class="hangman-decorator">Hangman</div>
+    <button id="hangman-new-game" class="hangman-button">NEW GAME</button>
+    <div class="hangman-center">
+        Please enter a value.
+        <div>
+            <input id="hangman-character" type="text" maxlength="1"/>
+            <span id="hangman-counter"></span>
+        </div>
+        <div id="hangman-word-container"></div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+<script src="scripts/hangman-api.js"></script>
+<script src="scripts/hangman-ui.js"></script>
+</body>
+</html>
