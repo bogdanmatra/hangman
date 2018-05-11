@@ -6,8 +6,9 @@ body {
     position: fixed;
     transform: rotate(-40deg);
     font-size: 200px;
-    top: 160px;
+    top: 180px;
     color: #ff6000;
+    z-index: -1;
 }
 
 .hangman-button {
@@ -16,12 +17,22 @@ body {
     color: white;
     background-color: #ff6000;
     margin: 25px;
+    border: 1px solid white;
     float: right;
+}
+
+.hangman-button:active {
+    border-style: none;
+    border: 1px solid #ff6000;
+}
+
+.hangman-button:focus {
+    outline: 0;
 }
 
 .hangman-center {
     text-align: center;
-    padding: 10%;
+    padding-top: 10%;
 }
 
 .hangman-center * {
@@ -29,18 +40,28 @@ body {
     font-size: 100px;
 }
 
-.hangman-center input{
+.hangman-center input {
     border: 0;
-    width: 70px;
+    width: 100px;
+    caret-color: #ff6000;
+    color: #ff6000;
+    font-weight: bolder;
+    background: transparent;
 }
 
 .hangman-center input:focus {
     outline: none;
 }
 
+.hangman-notice, #hangman-counter {
+    font-size: 20px;
+}
+
 #hangman-counter {
     font-size: 50px;
 }
+
 #hangman-word-container {
+    font-family: monospace;
     font-size: 150px;
 }

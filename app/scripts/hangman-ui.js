@@ -6,51 +6,58 @@
         var $hangmanCounter = $("#hangman-counter");
 
         /**
-         * Updates UI counter.
+         * Updates the UI after an interaction.
          */
-        var updateCounter = function () {
+        var updateUI = function (newMaskedWord) {
+            $wordContainer.html(newMaskedWord);
             $hangmanCounter.html(hangmanGame.getRetryCounter() + " of " + hangmanGame.getNumberOfRetries());
         }
 
         /**
-         * Starts a new game and updates UI.
+         * Starts a new game and initializes it.
          */
         var newGame = function () {
             hangmanGame = new Hangman({
-                words: ["3dhubs", "marvin", "print", "filament", "order"],
+                words: ['3dhubs', 'marvin', 'print', 'filament', 'order', 'layer'],
                 retries: 5
             });
-            hangmanGame.addWord("bogdan");
+            hangmanGame.addWord("Bogdan");
             var maskedWord = hangmanGame.startGame();
-            $wordContainer.html(maskedWord);
-            updateCounter();
-            $character.focus();
+            updateUI(maskedWord);
         }
 
         /**
-         * Checks if the entered character is in the masked word and updates UI.
+         * Checks if the entered character is in the masked word.
          */
         var checkValue = function (character) {
             var result = hangmanGame.checkCharacter(character);
-            $wordContainer.html(result.maskedWord);
-            updateCounter();
+            updateUI(result.maskedWord);
             if (result.gameOver) {
-                alert(result.message);
-                newGame();
+                //Wait for DOM to update before sending the alert.
+                window.setTimeout(function () {
+                    alert(result.message);
+                    newGame();
+                });
             }
         };
 
         /* Attach handlers. */
         $("#hangman-new-game").click(newGame);
         $character.keypress(function (event) {
-            checkValue(event.key);
+            // Keep character on screen for half a second.
             window.setTimeout(function () {
                 $character.val("");
-            })
+                checkValue(event.key);
+            }, 500);
+        });
+
+        /* Keep the focus on the game.*/
+        $(document).click(function () {
+            $character.focus();
         });
 
         /* Start the game. */
         newGame();
+        $character.focus();
     });
-
 })();
