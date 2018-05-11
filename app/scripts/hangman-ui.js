@@ -39,10 +39,14 @@
          * @param result
          */
         var updateAlert = function (result) {
+            var successClass = "hangman-success";
+            var failedClass = "hangman-danger";
+            var messageClass = ".hangman-message";
             var message, title = result.gameLost ? "Sorry!" : "Congratulations!";
             var successMessage = result.highScore ? "You are the best! Good job, NO failed attempts for you!" : "You won!";
             message = result.gameLost ? "You lost! The word was: " + result.maskedWord + "." : successMessage;
-            $hangmanAlert.find(".hangman-message").addClass(result.gameLost ? "hangman-danger" : "hangman-success");
+            $hangmanAlert.find(messageClass).addClass(result.gameLost ? failedClass : successClass);
+            $hangmanAlert.find(messageClass).removeClass(result.gameLost ? successClass : failedClass);
             $hangmanAlert.find("strong").text(title);
             $hangmanAlert.find("span").text(message);
         };
