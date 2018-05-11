@@ -14,7 +14,7 @@
         var mask = parameters.mask ? parameters.mask : DEFAULT_MASK;
 
         /**
-         * Gets all indexes of character in the current game active word.
+         * Gets all indexes of the character in the current game active word.
          * Private.
          * @param character The character to search for.
          * @returns {Array} Array of indexes.
@@ -29,7 +29,7 @@
 
         /**
          * Replaces all masked characters with the found character.
-         * If no character was fount the retry counter is incremented.
+         * If no character was found the retry counter is incremented.
          * Private.
          * @param character The character to search for.
          */
