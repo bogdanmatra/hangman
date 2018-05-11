@@ -44,16 +44,6 @@
         }
 
         /**
-         * Returns the success message.
-         * Private.
-         * @returns {string}
-         */
-        var getSuccessMessage = function () {
-            var highScore = retryCounter == 0;
-            return highScore ? "Congratulations, you won with NO failed attempts!" : "Game over! You won!";
-        }
-
-        /**
          * Adds 'word' to the word list.
          * Public.
          * @param value
@@ -81,7 +71,7 @@
         };
 
         /**
-         * Starts game and returnes the masked word.
+         * Starts game and returns the masked word.
          * Public.
          * @returns {string}
          */
@@ -102,22 +92,23 @@
          * @param character
          * @returns { maskedWord: The updated masked word.
          *            gameOver: True if the game is over.
-         *            message: The status message of the game.
+         *            gameLost: True if the game is lost.
+         *            highScore: True there was no failed attempt.
          *          }
          */
         this.checkCharacter = function (character) {
+            replaceAllFoundCharacters(character);
             if (retryCounter == retries) {
                 return {
                     maskedWord: activeWord,
                     gameOver: true,
-                    message: "Game over! You lost! The word was: " + activeWord + "."
+                    gameLost: true
                 }
             }
-            replaceAllFoundCharacters(character);
             return {
                 maskedWord: maskedWord,
                 gameOver: maskedWord == activeWord,
-                message: maskedWord == activeWord ? getSuccessMessage() : "Keep playing!"
+                highScore: retryCounter == 0
             }
         };
     };

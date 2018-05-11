@@ -1,63 +1,105 @@
 (function () {
     $(function () {
         var hangmanGame;
-        var $character = $("#hangman-character");
-        var $wordContainer = $("#hangman-word-container");
+        var $hangmanInput = $("#hangman-character");
+        var $hangmanWordContainer = $("#hangman-word-container");
         var $hangmanCounter = $("#hangman-counter");
+        var $hangmanAlert = $("#hangman-alert");
+        var $hangmanNewGame = $("#hangman-new-game");
+
+        var hangmanConfig = {
+            words: ['3dhubs', 'marvin', 'print', 'filament', 'order', 'layer'],
+            retries: 5
+        };
+        var additionalWord = "Bogdan";
+        var timeoutCancelId;
 
         /**
-         * Updates the UI after an interaction.
+         * Starts a new Hangman game.
          */
-        var updateUI = function (newMaskedWord) {
-            $wordContainer.html(newMaskedWord);
-            $hangmanCounter.html(hangmanGame.getNumberOfRetries() - hangmanGame.getRetryCounter() + " chances left.");
-        }
-
-        /**
-         * Starts a new game and initializes it.
-         */
-        var newGame = function () {
-            hangmanGame = new Hangman({
-                words: ['3dhubs', 'marvin', 'print', 'filament', 'order', 'layer'],
-                retries: 5
-            });
-            hangmanGame.addWord("Bogdan");
+        var startNewGame = function () {
+            hangmanGame = new Hangman(hangmanConfig);
+            hangmanGame.addWord(additionalWord);
             var maskedWord = hangmanGame.startGame();
-            updateUI(maskedWord);
+            updateGameUI(maskedWord);
         }
 
         /**
-         * Checks if the entered character is in the masked word.
+         * Updates the UI after an user interaction.
+         * @param newMaskedWord The new masked word which should be displayed on the screen.
          */
-        var checkValue = function (character) {
+        var updateGameUI = function (newMaskedWord) {
+            $hangmanWordContainer.html(newMaskedWord);
+            var chances = hangmanGame.getNumberOfRetries() - hangmanGame.getRetryCounter() - 1;
+            $hangmanCounter.html(chances >= 0 ? chances + " chances left." : "");
+        }
+
+        /**
+         * Updates the Hangman alert with the API result.
+         * @param result
+         */
+        var updateAlert = function (result) {
+            var message, title = result.gameLost ? "Sorry!" : "Congratulations!";
+            var successMessage = result.highScore ? "You are the best! Good job, NO failed attempts for you!" : "You won!";
+            message = result.gameLost ? "You lost! The word was: " + result.maskedWord + "." : successMessage;
+            $hangmanAlert.find(".hangman-message").addClass(result.gameLost ? "hangman-danger" : "hangman-success");
+            $hangmanAlert.find("strong").text(title);
+            $hangmanAlert.find("span").text(message);
+        };
+
+        /**
+         * Shows a custom Hangman alert.
+         * @param result The Hangman API result.
+         * @param time The time the alert stays on the screen before it disappears.
+         */
+        var hangmanAlert = function (result, time) {
+            updateAlert(result);
+            $hangmanAlert.show();
+            $hangmanInput.blur();
+            timeoutCancelId = window.setTimeout(function () {
+                $hangmanAlert.hide();
+                $hangmanInput.focus();
+                startNewGame();
+            }, time);
+        };
+
+        /**
+         * Handles the user key press input.
+         * @param character The character pressed by the user.
+         */
+        var keyPressHandler = function (character) {
             var result = hangmanGame.checkCharacter(character);
-            updateUI(result.maskedWord);
+            updateGameUI(result.maskedWord);
             if (result.gameOver) {
-                //Wait for DOM to update before sending the alert.
-                window.setTimeout(function () {
-                    alert(result.message);
-                    newGame();
-                });
+                hangmanAlert(result, 5000);
             }
         };
 
         /* Attach handlers. */
-        $("#hangman-new-game").click(newGame);
-        $character.keypress(function (event) {
+        $hangmanNewGame.click(startNewGame);
+        $hangmanInput.keypress(function (event) {
             // Keep character on screen for half a second.
             window.setTimeout(function () {
-                $character.val("");
-                checkValue(event.key);
+                $hangmanInput.val("");
+                keyPressHandler(event.key);
             }, 500);
         });
 
+        /* Make alert dismissible on click. */
+        $hangmanAlert.click(function () {
+            $hangmanAlert.hide();
+            $hangmanInput.focus();
+            window.clearTimeout(timeoutCancelId);
+            startNewGame();
+        });
+
         /* Keep the focus on the game.*/
-        $(document).click(function () {
-            $character.focus();
+        $(".hangman-container").click(function () {
+            $hangmanInput.focus();
         });
 
         /* Start the game. */
-        newGame();
-        $character.focus();
+        startNewGame();
+        $hangmanInput.focus();
     });
 })();
