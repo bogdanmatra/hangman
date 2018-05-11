@@ -22,7 +22,7 @@
             hangmanGame.addWord(additionalWord);
             var maskedWord = hangmanGame.startGame();
             updateGameUI(maskedWord);
-        }
+        };
 
         /**
          * Updates the UI after an user interaction.
@@ -32,7 +32,7 @@
             $hangmanWordContainer.html(newMaskedWord);
             var chances = hangmanGame.getNumberOfRetries() - hangmanGame.getRetryCounter() - 1;
             $hangmanCounter.html(chances >= 0 ? chances + " chances left." : "");
-        }
+        };
 
         /**
          * Updates the Hangman alert with the API result.
